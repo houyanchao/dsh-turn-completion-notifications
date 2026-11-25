@@ -1,0 +1,129 @@
+/* 通用 UI 基建样式：逐参数移植原扩展 global/ 下的
+   toast-manager / tooltip-manager / dropdown-manager / popconfirm-manager /
+   input-modal 五份样式（含 toast JS 内联样式的类化）。
+   深浅两套值由宿主容器 data-theme 切换（原版为 html[data-timeline-theme]）。 */
+
+/* ==== 宿主容器（imperative UI 的挂载点，自身不占布局） ==== */
+.host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  /* 原版各浮层直挂 body、z-index 2147483647/2147483648；
+     宿主容器封顶取最大值，保证相对页面的有效层级与原版一致。 */
+  z-index: 2147483647;
+}
+
+/* ==== Toast（原 GlobalToastManager 内联样式 + styles.css） ==== */
+.toast {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2147483647;
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: 400px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.toastMultiline {
+  box-sizing: border-box;
+  max-width: min(400px, calc(100vw - 16px));
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.toastMultilineCentered {
+  inset-inline: 0;
+  width: max-content;
+  margin-inline: auto;
+}
+
+/* 默认视觉（useClassStyles=false 时叠加） */
+.toastDefaultVisual {
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(-10px);
+}
+
+.toastVisible {
+  opacity: 1 !important;
+}
+
+.toastDefaultVisual.toastVisible {
+  transform: translateY(0) !important;
+}
+
+.toastIcon {
+  font-size: 16px;
+}
+
+/* AI 回复完成提示 - 右上角胶囊 Toast（原 .ait-ai-complete-toast） */
+.toastAiComplete {
+  padding: 7px 14px 7px 7px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  gap: 10px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  opacity: 0;
+  transform: translateX(14px) scale(0.96);
+  transition:
+    opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toastAiComplete .toastIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #22c55e 0%, #15803d 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(21, 128, 61, 0.34);
+  font-size: 13px;
+}
+
+.toastAiComplete .toastIcon svg {
+  display: block;
+}
+
+.toastAiComplete.toastVisible {
+  opacity: 1 !important;
+  transform: translateX(0) scale(1) !important;
+}
+
+.host[data-theme='dark'] .toastAiComplete {
+  background: rgba(28, 28, 30, 0.88);
+  color: #f5f5f7;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.24),
+    0 10px 28px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.host[data-theme='dark'] .toastAiComplete .toastIcon {
+  box-shadow: 0 2px 10px rgba(21, 128, 61, 0.3);
+}

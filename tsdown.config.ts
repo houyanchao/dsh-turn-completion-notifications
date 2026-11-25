@@ -10,13 +10,13 @@
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
-import { basename, dirname, resolve as resolvePath } from 'node:path'
+import { basename, dirname, relative, resolve as resolvePath } from 'node:path'
 import type { UserConfig } from 'tsdown'
 // tsdown can evaluate this config from a temporary cache outside the project.
 const { transform } = createRequire(import.meta.url)('lightningcss') as typeof import('lightningcss')
 
 // 必须与 package.json 的 name 一致：浏览器端按包名匹配 __ModuleLoader__ 注册 id。
-const PLUGIN_ID = 'dsh-timeline'
+const PLUGIN_ID = 'dsh-turn-completion-notifications'
 
 /**
  * 平台模块表：必须与 deepseekharness packages/client/web/src/platform.ts 的
@@ -53,7 +53,7 @@ const client: UserConfig = {
   format: 'cjs',
   platform: 'browser',
   dts: false,
-  sourcemap: true,
+  sourcemap: false,
   clean: false,
   external: [...CLIENT_EXTERNALS],
   define: {
@@ -69,17 +69,17 @@ const client: UserConfig = {
       if (!source.endsWith('.module.css')) return null
       const abs = importer !== undefined ? resolvePath(dirname(importer), source) : source
       const hash = createHash('sha1').update(await readFile(abs)).digest('hex').slice(0, 10)
-      return `${CSS_VIRTUAL_PREFIX}${abs}?${hash}${CSS_VIRTUAL_SUFFIX}`
+      return `${CSS_VIRTUAL_PREFIX}${relative(process.cwd(), abs)}?${hash}${CSS_VIRTUAL_SUFFIX}`
     },
     async load(virtualId: string) {
       if (!virtualId.startsWith(CSS_VIRTUAL_PREFIX)) return null
       const rest = virtualId.slice(CSS_VIRTUAL_PREFIX.length, -CSS_VIRTUAL_SUFFIX.length)
       const q = rest.lastIndexOf('?')
-      const fileId = q === -1 ? rest : rest.slice(0, q)
+      const fileId = resolvePath(q === -1 ? rest : rest.slice(0, q))
       this.addWatchFile(fileId)
       const source = await readFile(fileId)
       const { code, exports: cssExports } = transform({
-        filename: fileId,
+        filename: `${PLUGIN_ID}/${relative(process.cwd(), fileId)}`,
         code: source,
         cssModules: { pattern: '[hash]_[local]' },
         minify: true,

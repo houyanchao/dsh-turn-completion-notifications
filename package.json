@@ -1,23 +1,22 @@
 {
-  "name": "dsh-timeline",
-  "description": "DSH插件：时间轴导航 · 文件夹收藏 · 提示词库 · 对话导出 · 公式复制 · 对话截图",
-  "version": "0.1.15",
+  "name": "dsh-turn-completion-notifications",
+  "version": "0.1.0",
+  "description": "为 DeepSeek Harness（DSH）打造的回复完成提醒插件，浏览较早的提问时，通过弹窗和可选提示音得知当前回复已完成。",
   "keywords": [
-    "dsh",
+    "deepseek",
     "deepseek-harness",
+    "deepseek-harness-plugin",
     "dsh-plugin",
-    "timeline",
-    "conversation",
-    "export",
-    "bookmark"
+    "dsh",
+    "notifications"
   ],
-  "homepage": "https://github.com/houyanchao/dsh-timeline#readme",
+  "homepage": "https://github.com/houyanchao/dsh-turn-completion-notifications#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/houyanchao/dsh-timeline.git"
+    "url": "git+https://github.com/houyanchao/dsh-turn-completion-notifications.git"
   },
   "bugs": {
-    "url": "https://github.com/houyanchao/dsh-timeline/issues"
+    "url": "https://github.com/houyanchao/dsh-turn-completion-notifications/issues"
   },
   "type": "module",
   "main": "lib/index.js",
@@ -33,6 +32,7 @@
     },
     "./package.json": "./package.json"
   },
+  "license": "GPL-3.0-or-later",
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
@@ -40,9 +40,10 @@
     "client": {
       "inject": [
         "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-chat",
         "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-theme"
+        "@deepseek-ai/dsh-client-ui-chat",
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-settings"
       ],
       "platform": "web"
     }
@@ -50,61 +51,33 @@
   "scripts": {
     "bundle": "tsdown && tsc -p tsconfig.types.json",
     "watch": "tsdown --watch",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run bundle"
-  },
-  "license": "GPL-3.0-or-later",
-  "peerDependencies": {
-    "@deepseek-ai/cordis": "*",
-    "@deepseek-ai/dsh-api-session-controller": "*",
-    "@deepseek-ai/dsh-client-connection": "*",
-    "@deepseek-ai/dsh-client-locale": "*",
-    "@deepseek-ai/dsh-client-store": "*",
-    "@deepseek-ai/dsh-client-ui-chat": "*",
-    "@deepseek-ai/dsh-client-ui-conversation": "*",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "*",
-    "@deepseek-ai/dsh-client-ui-layout": "*",
-    "@deepseek-ai/dsh-client-ui-primitives": "*",
-    "@deepseek-ai/dsh-client-ui-renderer": "*",
-    "@deepseek-ai/dsh-client-ui-settings": "*",
-    "@deepseek-ai/dsh-client-ui-sidebar": "*",
-    "@deepseek-ai/dsh-client-ui-slots": "*",
-    "@deepseek-ai/dsh-client-ui-theme": "*",
-    "react": "^18.2.0"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "link:../../deepseekharness/vendor/cordis",
-    "@deepseek-ai/dsh-api-session-controller": "link:../../deepseekharness/packages/api/session-controller",
-    "@deepseek-ai/dsh-client-connection": "link:../../deepseekharness/packages/client/connection",
-    "@deepseek-ai/dsh-client-locale": "link:../../deepseekharness/packages/client/locale",
-    "@deepseek-ai/dsh-client-store": "link:../../deepseekharness/packages/client/store",
-    "@deepseek-ai/dsh-client-ui-chat": "link:../../deepseekharness/packages/client/ui-chat",
-    "@deepseek-ai/dsh-client-ui-conversation": "link:../../deepseekharness/packages/client/ui-conversation",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "link:../../deepseekharness/packages/client/ui-input-trigger",
-    "@deepseek-ai/dsh-client-ui-layout": "link:../../deepseekharness/packages/client/ui-layout",
-    "@deepseek-ai/dsh-client-ui-primitives": "link:../../deepseekharness/packages/client/ui-primitives",
-    "@deepseek-ai/dsh-client-ui-renderer": "link:../../deepseekharness/packages/client/ui-renderer",
-    "@deepseek-ai/dsh-client-ui-settings": "link:../../deepseekharness/packages/client/ui-settings",
-    "@deepseek-ai/dsh-client-ui-sidebar": "link:../../deepseekharness/packages/client/ui-sidebar",
-    "@deepseek-ai/dsh-client-ui-slots": "link:../../deepseekharness/packages/client/ui-slots",
-    "@deepseek-ai/dsh-client-ui-theme": "link:../../deepseekharness/packages/client/ui-theme",
-    "@types/react": "~18.3.1",
-    "@types/react-dom": "~18.3.7",
-    "lightningcss": "^1.32.0",
-    "react": "^18.2.0",
-    "tsdown": "^0.22.2",
-    "typescript": "^6.0.3",
-    "unrun": "^0.2.39"
+    "@deepseek-ai/cordis": "4.0.2",
+    "@deepseek-ai/dsh-client-locale": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-store": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-chat": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-conversation": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-layout": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-renderer": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-session": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-settings": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-slots": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-theme": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-session": "0.1.5-rc.1",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "lightningcss": "1.33.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tsdown": "0.22.14",
+    "typescript": "6.0.3",
+    "unrun": "0.2.39"
   },
   "files": [
-    "lib/index.js",
-    "lib/client.js",
-    "lib/client.js.map",
-    "lib/types/**/*.d.ts",
-    "src/client/conversationExport/vendor/LICENSE",
-    "cordis.patch.yml"
-  ],
-  "dependencies": {
-    "temml": "^0.13.4"
-  }
+    "lib",
+    "cordis.patch.yml",
+    "README.en.md"
+  ]
 }

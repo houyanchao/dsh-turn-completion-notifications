@@ -1,73 +1,55 @@
 <div align="center">
 
-# dsh-timeline
+# dsh-turn-completion-notifications
 
-**A productivity plugin for [DeepSeek Harness](https://deepseek-harness.github.io/deepseek-harness/)**
+**Turn completion notifications for [DeepSeek Harness](https://deepseek-harness.github.io/deepseek-harness/)**
 
-Timeline navigation · Starred folders · Prompt library · Conversation export · Formula copy · Screenshots
+See when the current reply is ready while you read an earlier turn. Enable a sound if you prefer an audible cue.
 
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-6128FF)](https://deepseek-harness.github.io/deepseek-harness/)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](./LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/houyanchao/dsh-timeline/pulls)
-[![GitHub stars](https://img.shields.io/github/stars/houyanchao/dsh-timeline?style=social)](https://github.com/houyanchao/dsh-timeline)
+[![GitHub stars](https://img.shields.io/github/stars/houyanchao/dsh-turn-completion-notifications?style=social)](https://github.com/houyanchao/dsh-turn-completion-notifications)
 
 [简体中文](./README.md) | **English**
 
-![Feature overview](./docs/intro.png)
-
 </div>
 
-## 📖 What is dsh-timeline?
+## Usage
 
-dsh-timeline is a feature-enhancement plugin for [DeepSeek Harness](https://deepseek-harness.github.io/deepseek-harness/).
+1. In a DSH Web conversation with at least two questions, scroll to an earlier turn while the latest reply is being generated.
+2. When the turn finishes, a **Reply completed** pill appears at the upper right and fades after about 3.5 seconds. Reading the latest turn, reaching the bottom of the chat, or chatting in a single-turn conversation keeps reminders quiet.
+3. Open **Settings → General → Turn completion notifications → Settings** to configure the popup and sound separately. The popup is enabled by default. Sound is off by default. Enabling either option previews it immediately.
 
-Once an AI conversation gets long, finding things becomes a chore: revisiting a question means endless scrolling, key takeaways get scattered across sessions, and formulas or content are hard to take with you. dsh-timeline was built for exactly this — it renders a visual timeline beside the conversation so you can jump anywhere in one click, and rounds out the workflow with starred folders, pin markers, quick notes, a prompt library, and multi-format export: find it, note it, organize it, take it with you.
+The reminder appears inside the current conversation page and requires no desktop notification permission. The sound ships with the plugin and follows your browser’s autoplay policy. The interface follows the DSH language and theme.
 
-The plugin blends right into the host UI: it follows the light / dark theme in real time, ships with an English / Chinese interface, and every feature can be toggled independently — install it and go, without disrupting your habits.
+## Install from GitHub
 
-## ✨ Features
-
-- 🧭 **Timeline navigation** — a rail on the right maps every question; click to jump, with a compact mode, virtualized rendering, and `↑` / `↓` shortcuts
-- 📌 **Key-point markers** — long-press a timeline node to pin it, so important questions stand out
-- 📋 **Question list** — numbered list of all questions, active row follows your reading position
-- ⭐ **Starred folders** — file whole conversations, single questions, and notes into two-level folders; drag to organize, pin, and search
-- 📝 **Notepad** — a draggable, resizable quick-notes panel for capturing ideas
-- 💬 **Prompt library** — save frequently used prompts and insert them from beside the composer in one click
-- ⌨️ **Smart input** — `Enter` for a newline, double-`Enter` to send; quote selected text as a follow-up; keep your reading position after sending
-- 📤 **Conversation export** — Markdown / TXT / JSON / CSV / PNG / PDF, with math formulas rendered as usual
-- 🧮 **Formula copy** — click a formula to copy it as LaTeX or MathML, ready to paste into Word
-- 📸 **Message screenshots** — click Screenshot below a reply, select questions or replies, then choose a resolution to copy or download one PNG. Captures that exceed the size limit are scaled down
-- 🔔 **Reply alerts** — toast and optional sound when a reply finishes while you are reading earlier messages
-- 💾 **Data backup** — one-click export / import of all plugin data (JSON)
-- 🎨 **Native feel** — follows the host's light / dark theme, English / Chinese UI, per-feature toggles
-
-## 📦 Installation
-
-Install from npm (recommended):
+With the DSH CLI and pnpm on your PATH, run the following commands.
 
 ```bash
-# install the dsh-timeline plugin
-dsh plugin --profile web add dsh-timeline
-
-# launch DeepSeek Harness
+dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
 dsh web
 ```
 
-Upgrade:
+## Install from source
+
+With DeepSeek Harness, pnpm and Node.js 24.11+ installed, run these commands in the plugin checkout:
 
 ```bash
-dsh plugin --profile web update dsh-timeline
+npm ci
+npm run typecheck
+npm run bundle
+npm pack
+dsh plugin --profile web add ./dsh-turn-completion-notifications-0.1.0.tgz
+dsh web
 ```
 
-> [!TIP]
-> Seeing `command not found: dsh`? You are running DSH from a source checkout without the global CLI. Run the commands above from the root of the DSH source repository, replacing the leading `dsh` with `pnpm dsh` — e.g. `pnpm dsh plugin --profile web add dsh-timeline`.
+When running DSH from its source checkout, run `pnpm dsh plugin --profile web add /absolute/path/to/dsh-turn-completion-notifications-0.1.0.tgz` there, then run `pnpm dsh web`.
 
-## ⭐ Support
+## Moving from dsh-timeline
 
-If dsh-timeline helped you, share it with your friends — and a GitHub Star helps more people discover it!
+This standalone plugin brings over the completion reminder from [dsh-timeline](https://github.com/houyanchao/dsh-timeline). On first use it imports the popup and sound preferences stored by timeline on the same site. It then saves its own settings in your browser and synchronizes them across tabs on that site. If both plugins are enabled, turn off reminders in one to avoid duplicate alerts.
 
-## 📄 License
+## License
 
-This project is open-sourced under the [GPL-3.0-or-later](./LICENSE) license.
-
-You are free to use, study, modify, and distribute this project, but derivative works must be released under the same license and keep the original copyright notice. Please make sure your usage complies with the license before any commercial use.
+[GPL-3.0-or-later](./LICENSE)
