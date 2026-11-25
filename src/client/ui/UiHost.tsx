@@ -1,0 +1,114 @@
+/**
+ * 通用 UI 宿主：挂在 shell.overlay 槽位，承载全部命令式 UI
+ * （toast / tooltip / dropdown / popconfirm / inputModal / 文件夹编辑弹窗 /
+ * 收藏编辑弹窗）的渲染。主题跟随宿主（原版 html[data-timeline-theme] 的等价物）。
+ */
+import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { createPortal } from 'react-dom'
+import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import type { PluginInstaller } from '../shared/pluginInstaller.ts'
+import type { NS } from '../locales.ts'
+import { selectCurrentSessionId } from '../shared/currentSession.ts'
+import { detectDarkTheme, observeTheme } from '../shared/theme.ts'
+import { FolderEditModalHost } from '../starred/FolderEditModal.tsx'
+import { StarEditModalHost, starEditModal } from '../timeline/StarModal.tsx'
+import { NotepadHost } from '../notepad/NotepadPanel.tsx'
+import { panelModal } from '../panelModal/bus.ts'
+import { ChangelogHost } from '../changelog/ChangelogModal.tsx'
+import { FormulaHost } from '../formula/FormulaHost.tsx'
+import type { OpenPluginVersions } from './AvailableUpdateBadge.tsx'
+import { ToastHost, toast } from './toast.tsx'
+import { TooltipHost, tooltip } from './tooltip.tsx'
+import { DropdownHost, dropdown } from './dropdown.tsx'
+import { PopconfirmHost, popconfirm } from './popconfirm.tsx'
+import { InputModalHost, inputModal } from './inputModal.tsx'
+import css from './ui.module.css'
+
+const PanelHost = lazy(async () => ({ default: (await import('../panelModal/PanelHost.tsx')).PanelHost }))
+
+/** UiHost props（root 槽位运行时 + 词典 + 设置面板收藏 tab 的会话导航）。 */
+export type UiHostProps = PropsRuntime<'shell.overlay'> & PropsLocale<typeof NS> & {
+  /** 在主视图中打开指定会话。 */
+  readonly openSession: (sessionId: string) => void
+  readonly openPluginVersions: OpenPluginVersions
+  readonly installer: PluginInstaller
+}
+
+/**
+ * 通用 UI 宿主组件。
+ * @param props - 词典 + 会话导航。
+ * @returns 各命令式 UI 的渲染宿主。
+ */
+export function UiHost({ t, useSessions, openSession, openPluginVersions, installer }: UiHostProps) {
+  const currentSessionId = useSessions(selectCurrentSessionId)
+  const request = useSyncExternalStore(panelModal.subscribe, panelModal.get)
+  const [panelRequested, setPanelRequested] = useState(false)
+  useEffect(() => {
+    if (request !== null) setPanelRequested(true)
+  }, [request])
+  useEffect(() => () => {
+    panelModal.consume()
+    toast.forceHideAll()
+    tooltip.forceHideAll()
+    dropdown.forceHideAll()
+    popconfirm.hide(false)
+    inputModal.forceClose()
+    starEditModal.forceClose()
+  }, [])
+  const [dark, setDark] = useState(() => detectDarkTheme())
+  useEffect(() => observeTheme(() => { setDark(detectDarkTheme()) }), [])
+
+  // 会话切换时清理全部浮层（原各管理器监听 url:change 的自治清理：
+  // toast forceHideAll / tooltip forceHideAll / dropdown forceHideAll /
+  // popconfirm hide(false) / inputModal forceClose）。
+  const prevSessionRef = useRef(currentSessionId)
+  useEffect(() => {
+    if (prevSessionRef.current === currentSessionId) return
+    prevSessionRef.current = currentSessionId
+    toast.forceHideAll()
+    tooltip.forceHideAll()
+    dropdown.forceHideAll()
+    popconfirm.hide(false)
+    inputModal.forceClose()
+    starEditModal.forceClose()
+  }, [currentSessionId])
+
+  // The shell overlay has its own stacking context. Mount the plugin's
+  // dialogs and their tooltips together above the page selection controls.
+  return createPortal(
+    <div className={css.host} data-theme={dark ? 'dark' : 'light'}>
+      <ToastHost dark={dark} />
+      <DropdownHost dark={dark} />
+      <PopconfirmHost
+        defaultConfirmText={t('common.confirm')}
+        defaultCancelText={t('common.cancel')}
+      />
+      <InputModalHost
+        dark={dark}
+        defaults={{
+          placeholder: t('common.inputPlaceholder'),
+          requiredMessage: t('common.inputRequired'),
+          confirmText: t('common.confirm'),
+          cancelText: t('common.cancel'),
+        }}
+      />
+      <FolderEditModalHost dark={dark} />
+      <StarEditModalHost t={t} dark={dark} />
+      <NotepadHost t={t} dark={dark} />
+      {panelRequested
+        ? (
+          <Suspense fallback={null}>
+            <PanelHost t={t} currentSessionId={currentSessionId} openSession={openSession} openPluginVersions={openPluginVersions} installer={installer} />
+          </Suspense>
+        )
+        : null}
+      <ChangelogHost t={t} />
+      {/* 公式复制（hover 高亮 + tooltip + 点击复制 LaTeX/MathML）。 */}
+      <FormulaHost t={t} dark={dark} currentSessionId={currentSessionId} />
+      {/* Tooltip 必须最后渲染：各浮层 z-index 都顶格 2147483647（更大的值会被
+          钳位到该上限），同 z 按 DOM 顺序绘制，排在末尾才能盖住弹窗类浮层。 */}
+      <TooltipHost dark={dark} />
+    </div>,
+    document.body,
+  )
+}
