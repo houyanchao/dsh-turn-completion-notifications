@@ -1,4 +1,5 @@
 import type { Context } from '@deepseek-ai/cordis'
+import { whenTimelineInactive } from './whenTimelineInactive.ts'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
@@ -14,6 +15,10 @@ const id = 'dsh-turn-completion-notifications'
 export const inject = ['slots', 'locale', 'theme', 'sessions', 'uiConversation']
 
 export function apply(ctx: Context): void {
+  whenTimelineInactive(ctx, { name: 'dsh-turn-completion-notifications', inject, apply: activate })
+}
+
+function activate(ctx: Context): void {
   bindTheme(ctx)
   ctx.effect(bindSettings, `${id}: preferences`)
   ctx.effect(() => () => { clearReminder() }, `${id}: dismiss notification`)

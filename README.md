@@ -4,7 +4,7 @@
 
 **[DeepSeek Harness](https://deepseek-harness.github.io/deepseek-harness/) 回复完成提醒插件**
 
-浏览较早的提问时，在当前页面看到 AI 回复完成的提醒，也可以开启提示音。
+当你在阅读较早的提问时，AI 完成本轮回复后，插件默认会在页面内弹出提醒并播放提示音。
 
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-6128FF)](https://deepseek-harness.github.io/deepseek-harness/)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](./LICENSE)
@@ -18,7 +18,7 @@
 
 1. 在 DSH Web 中进行至少两次提问。最新回复生成时，向上滚动到更早的一轮。
 2. 每轮回复正常完成时，页面右上角会显示「回复已完成」，约 3.5 秒后淡出。排队发送的提问逐轮判断。手动停止、请求失败、正在阅读本轮回复、接近聊天底部或会话中只有一次提问时会保持安静。
-3. 在 **设置 → 通用设置 → AI 回复完成提醒 → 设置** 中分别开关弹窗和提示音。弹窗默认开启，提示音默认关闭。打开任一开关即可预览。
+3. 在 **设置 → 通用设置 → AI 回复完成提醒 → 设置** 中分别开关弹窗和提示音。首次使用且没有已保存的偏好时，弹窗和提示音均默认开启。打开任一开关即可预览。
 
 提醒显示在当前会话的网页内，无需授权系统桌面通知。提示音随插件内置，浏览器的自动播放设置可能影响播放。插件跟随 DSH 的界面语言与深浅主题。
 
@@ -48,7 +48,7 @@ dsh web
 
 ## 从 dsh-timeline 迁移
 
-该功能源自 [dsh-timeline](https://github.com/houyanchao/dsh-timeline)，可独立安装。首次使用时，插件读取当前站点上已有的 timeline 弹窗和声音偏好，之后将设置单独保存在浏览器中，同站点的标签页会同步更新。若同时启用两个插件，请在其中一个插件里关闭提醒，以免重复。
+该功能源自 [dsh-timeline](https://github.com/houyanchao/dsh-timeline)，可独立安装。首次使用时，插件读取当前站点上已有的 timeline 弹窗和声音偏好，之后将设置单独保存在浏览器中，同站点的标签页会同步更新。dsh-timeline 运行时，本插件自动暂停，由 Timeline 管理提醒。禁用或卸载 Timeline 后，本插件会按自己保存的弹窗和声音偏好自动恢复。
 
 ## 许可证
 

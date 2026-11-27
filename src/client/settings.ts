@@ -8,7 +8,7 @@ export interface ReminderSettings {
 const key = 'dsh.turn-completion-notifications.settings'
 const legacyKey = 'dsh.timeline.settings'
 const fields = ['aiCompleteToastEnabled', 'aiCompleteSoundEnabled'] as const
-const defaults: ReminderSettings = { aiCompleteToastEnabled: true, aiCompleteSoundEnabled: false }
+const defaults: ReminderSettings = { aiCompleteToastEnabled: true, aiCompleteSoundEnabled: true }
 const unsaved: Partial<Record<keyof ReminderSettings, boolean>> = {}
 let unsavedBaseline: ReminderSettings | undefined
 
