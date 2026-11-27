@@ -34,15 +34,22 @@
 
 ## 📦 安装
 
-安装 DSH CLI 和 pnpm 后，运行以下命令安装插件并启动 Web 界面。
+### 安装方式 1（客户端）
 
-```bash
-dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
-dsh web
+在 [DeepSeek Harness](https://www.deepseek.com/harness/) 客户端打开「插件」→「添加插件」，粘贴下面的仓库地址，点击「安装」。
+
+```text
+https://github.com/houyanchao/dsh-turn-completion-notifications
 ```
 
-> [!TIP]
-> 如果从源码运行 DSH，请在 DSH 源码仓库根目录执行上面的命令，将开头的 `dsh` 换成 `pnpm dsh`。
+![DeepSeek Harness 客户端中的「插件」页面、「添加插件」按钮和输入框](./docs/install-client.png)
+
+### 安装方式 2（通过命令行从 GitHub 安装）
+
+```bash
+# 安装 dsh-turn-completion-notifications 插件
+dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
+```
 
 ## 🔄 从 dsh-timeline 迁移
 
@@ -52,7 +59,7 @@ dsh web
 
 ## ⭐ 支持一下
 
-如果这款插件帮到了你，欢迎在 [GitHub](https://github.com/houyanchao/dsh-turn-completion-notifications) 给个 Star，或分享给同样使用 DSH 的朋友。
+如果 dsh-turn-completion-notifications 好用，欢迎给个🌟，帮助更多人发现它！
 
 ## 📄 许可证
 

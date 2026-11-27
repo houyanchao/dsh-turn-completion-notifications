@@ -34,15 +34,22 @@ Open **Settings → General → Turn completion notifications → Settings** to 
 
 ## 📦 Installation
 
-With the DSH CLI and pnpm installed, add the plugin and launch the web interface.
+### Method 1 (desktop client)
 
-```bash
-dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
-dsh web
+In the [DeepSeek Harness](https://www.deepseek.com/harness/) client, open **Plugins → Add plugin**, paste the repository URL below, then click **Install**.
+
+```text
+https://github.com/houyanchao/dsh-turn-completion-notifications
 ```
 
-> [!TIP]
-> If you run DSH from source, run the commands above from the **DSH repository root** and replace the leading `dsh` with `pnpm dsh`.
+![The Plugins page, the Add plugin button and the installation field in the DeepSeek Harness client](./docs/install-client.png)
+
+### Method 2 (install from GitHub with the CLI)
+
+```bash
+# Install dsh-turn-completion-notifications
+dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
+```
 
 ## 🔄 Moving from dsh-timeline
 
@@ -52,7 +59,7 @@ The first time the standalone plugin runs, it imports any popup and sound prefer
 
 ## ⭐ Support
 
-If the plugin helps you, give it a star on [GitHub](https://github.com/houyanchao/dsh-turn-completion-notifications) or share it with another DSH user.
+If dsh-turn-completion-notifications is useful to you, give it a 🌟 to help others discover it!
 
 ## 📄 License
 
