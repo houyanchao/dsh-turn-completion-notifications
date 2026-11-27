@@ -4,52 +4,56 @@
 
 **[DeepSeek Harness](https://deepseek-harness.github.io/deepseek-harness/) 回复完成提醒插件**
 
-当你在阅读较早的提问时，AI 完成本轮回复后，插件默认会在页面内弹出提醒并播放提示音。
+回看历史对话时，用弹窗或提示音获知新回复已完成。
 
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-6128FF)](https://deepseek-harness.github.io/deepseek-harness/)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](./LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/houyanchao/dsh-turn-completion-notifications/pulls)
 [![GitHub stars](https://img.shields.io/github/stars/houyanchao/dsh-turn-completion-notifications?style=social)](https://github.com/houyanchao/dsh-turn-completion-notifications)
 
 **简体中文** | [English](./README.en.md)
 
 </div>
 
-## 如何使用
+## 📖 dsh-turn-completion-notifications 是什么？
 
-1. 在 DSH Web 中进行至少两次提问。最新回复生成时，向上滚动到更早的一轮。
-2. 每轮回复正常完成时，页面右上角会显示「回复已完成」，约 3.5 秒后淡出。排队发送的提问逐轮判断。手动停止、请求失败、正在阅读本轮回复、接近聊天底部或会话中只有一次提问时会保持安静。
-3. 在 **设置 → 通用设置 → AI 回复完成提醒 → 设置** 中分别开关弹窗和提示音。首次使用且没有已保存的偏好时，弹窗和提示音均默认开启。打开任一开关即可预览。
+在 DSH Web 里追问后，你可以趁 AI 生成回复时向上翻，继续读上一轮的内容。如果新回复在屏幕下方完成，插件会在当前会话页面提醒你，省去反复滚到底部查看进度的操作。
 
-提醒显示在当前会话的网页内，无需授权系统桌面通知。提示音随插件内置，浏览器的自动播放设置可能影响播放。插件跟随 DSH 的界面语言与深浅主题。
+## ✨ 功能特性
 
-## 从 GitHub 安装
+- 🔔 **页面内弹窗** — 右上角显示「回复已完成」，约 3.5 秒后淡出。无需授权系统桌面通知。
+- 🔊 **可选提示音** — 使用内置提示音。弹窗和声音可以分别开关，也可以同时启用。提示音播放受浏览器自动播放设置影响。
+- 📚 **按阅读位置提醒** — 仅在回看较早的提问、且本轮回复正常完成时触发。正在阅读本轮回复、接近会话底部、手动停止或请求失败时都不会提醒。排队发送的提问逐轮判断。
+- 🎨 **跟随宿主界面** — 提醒和设置支持中英文，跟随 DSH 的深浅主题。
 
-安装 DSH CLI 和 pnpm 后运行：
+## ⚙️ 使用与设置
+
+在同一会话中发送第二个或后续提问，趁新回复生成时向上滚动到上一轮，停留在那里即可收到完成提醒。
+
+打开 **设置 → 通用设置 → AI 回复完成提醒 → 设置**，可以分别调整「弹窗提醒」和「声音提醒」。没有已保存的偏好时，两项默认开启。打开任一开关即可预览对应效果。
+
+## 📦 安装
+
+安装 DSH CLI 和 pnpm 后，运行以下命令安装插件并启动 Web 界面。
 
 ```bash
 dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
 dsh web
 ```
 
-## 从源码安装
+> [!TIP]
+> 如果从源码运行 DSH，请在 DSH 源码仓库根目录执行上面的命令，将开头的 `dsh` 换成 `pnpm dsh`。
 
-安装支持 Web 配置的 DeepSeek Harness、pnpm 及 Node.js 24.11+，在本仓库根目录运行：
+## 🔄 从 dsh-timeline 迁移
 
-```bash
-npm ci
-npm run typecheck
-npm run bundle
-npm pack
-dsh plugin --profile web add ./dsh-turn-completion-notifications-0.1.0.tgz
-dsh web
-```
+此功能也包含在 [dsh-timeline](https://github.com/houyanchao/dsh-timeline) 中。Timeline 运行期间，由它负责提醒，独立插件自动暂停。禁用或卸载 Timeline 后，独立插件自动接手。
 
-若从源码运行 DSH，可在 DSH 仓库根目录使用 `pnpm dsh plugin --profile web add /absolute/path/to/dsh-turn-completion-notifications-0.1.0.tgz`，再运行 `pnpm dsh web`。
+独立插件首次启用时会读取 Timeline 在当前站点保存的弹窗和声音偏好。之后的更改由独立插件保存在浏览器中，并同步到同一站点打开的其他标签页。
 
-## 从 dsh-timeline 迁移
+## ⭐ 支持一下
 
-该功能源自 [dsh-timeline](https://github.com/houyanchao/dsh-timeline)，可独立安装。首次使用时，插件读取当前站点上已有的 timeline 弹窗和声音偏好，之后将设置单独保存在浏览器中，同站点的标签页会同步更新。dsh-timeline 运行时，本插件自动暂停，由 Timeline 管理提醒。禁用或卸载 Timeline 后，本插件会按自己保存的弹窗和声音偏好自动恢复。
+如果这款插件帮到了你，欢迎在 [GitHub](https://github.com/houyanchao/dsh-turn-completion-notifications) 给个 Star，或分享给同样使用 DSH 的朋友。
 
-## 许可证
+## 📄 许可证
 
-[GPL-3.0-or-later](./LICENSE)
+本项目基于 [GPL-3.0-or-later](./LICENSE) 协议开源。

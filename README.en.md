@@ -4,52 +4,56 @@
 
 **Turn completion notifications for [DeepSeek Harness](https://deepseek-harness.github.io/deepseek-harness/)**
 
-When a reply finishes while you’re reading an earlier turn, the plugin shows an in-page notification and plays a sound by default.
+Get a popup or a sound when a reply finishes while you’re reading an earlier turn.
 
 [![DSH Plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-6128FF)](https://deepseek-harness.github.io/deepseek-harness/)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](./LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/houyanchao/dsh-turn-completion-notifications/pulls)
 [![GitHub stars](https://img.shields.io/github/stars/houyanchao/dsh-turn-completion-notifications?style=social)](https://github.com/houyanchao/dsh-turn-completion-notifications)
 
 [简体中文](./README.md) | **English**
 
 </div>
 
-## Usage
+## 📖 What is dsh-turn-completion-notifications?
 
-1. In a DSH Web conversation with at least two questions, scroll to an earlier turn while the latest reply is being generated.
-2. When a reply finishes successfully, a **Reply completed** pill appears at the upper right and fades after about 3.5 seconds. Each queued turn is checked separately. Reminders stay quiet when you stop a reply, a request fails, you are reading that reply or near the bottom of the chat, or the conversation has only one question.
-3. Open **Settings → General → Turn completion notifications → Settings** to configure the popup and sound separately. Both options are on by default if you have no saved preferences. Enabling either option previews it immediately.
+After asking a follow-up question in DSH Web, you can scroll up to reread an earlier answer while the next one is being written. When the new reply finishes below your reading position, the plugin lets you know right in the conversation, so you can keep your place.
 
-The reminder appears inside the current conversation page and requires no desktop notification permission. The sound ships with the plugin and follows your browser’s autoplay policy. The interface follows the DSH language and theme.
+## ✨ Features
 
-## Install from GitHub
+- 🔔 **In-page popup** — “Reply completed” appears in the upper-right corner and fades after about 3.5 seconds. It requires no desktop notification permission.
+- 🔊 **Optional sound** — Choose the built-in sound, the popup, or both. Sound playback follows your browser’s autoplay settings.
+- 📚 **Reminders while reading earlier turns** — A reminder appears only when a reply completes successfully while you’re reading an earlier turn. The plugin stays quiet if you’re already reading the reply, you’re near the bottom of the chat, you stop generation, or the request fails. It checks each queued turn separately.
+- 🎨 **Language and theme** — The reminder and settings follow the English or Chinese interface and the light or dark theme in DSH.
 
-With the DSH CLI and pnpm on your PATH, run the following commands.
+## ⚙️ Usage and settings
+
+Ask a second or later question in the same conversation. While the reply is being generated, scroll up to the previous turn and stay there to receive a completion reminder.
+
+Open **Settings → General → Turn completion notifications → Settings** to adjust **Popup reminder** and **Sound reminder** independently. Both are on by default if you have no saved preferences. Turning either option on gives you a preview.
+
+## 📦 Installation
+
+With the DSH CLI and pnpm installed, add the plugin and launch the web interface.
 
 ```bash
 dsh plugin --profile web add https://github.com/houyanchao/dsh-turn-completion-notifications/archive/refs/heads/main.tar.gz
 dsh web
 ```
 
-## Install from source
+> [!TIP]
+> If you run DSH from source, run the commands above from the **DSH repository root** and replace the leading `dsh` with `pnpm dsh`.
 
-With DeepSeek Harness, pnpm and Node.js 24.11+ installed, run these commands in the plugin checkout:
+## 🔄 Moving from dsh-timeline
 
-```bash
-npm ci
-npm run typecheck
-npm run bundle
-npm pack
-dsh plugin --profile web add ./dsh-turn-completion-notifications-0.1.0.tgz
-dsh web
-```
+[dsh-timeline](https://github.com/houyanchao/dsh-timeline) also includes completion reminders. While Timeline is running, it handles reminders and the standalone plugin pauses. The standalone plugin takes over automatically when you disable or uninstall Timeline.
 
-When running DSH from its source checkout, run `pnpm dsh plugin --profile web add /absolute/path/to/dsh-turn-completion-notifications-0.1.0.tgz` there, then run `pnpm dsh web`.
+The first time the standalone plugin runs, it imports any popup and sound preferences Timeline saved on the same site. It then saves its own preferences in your browser and syncs changes across tabs on that site.
 
-## Moving from dsh-timeline
+## ⭐ Support
 
-This standalone plugin brings over the completion reminder from [dsh-timeline](https://github.com/houyanchao/dsh-timeline). On first use it imports the popup and sound preferences stored by timeline on the same site. It then saves its own settings in your browser and synchronizes them across tabs on that site. While dsh-timeline is running, this plugin pauses and Timeline manages reminders. Disabling or uninstalling Timeline automatically restores this plugin with its saved popup and sound preferences.
+If the plugin helps you, give it a star on [GitHub](https://github.com/houyanchao/dsh-turn-completion-notifications) or share it with another DSH user.
 
-## License
+## 📄 License
 
-[GPL-3.0-or-later](./LICENSE)
+This project is licensed under [GPL-3.0-or-later](./LICENSE).
