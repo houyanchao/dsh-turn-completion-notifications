@@ -1,0 +1,6 @@
+url: https://github.com/houyanchao/dsh-turn-completion-notifications
+name: houyanchao/dsh-turn-completion-notifications
+category: notify
+description:
+  en: Show an in-page alert or play a sound when a reply finishes while you are reading an earlier turn.
+  zh: AI 回复完成提醒插件，通过弹窗和提示音得知当前回复已完成。

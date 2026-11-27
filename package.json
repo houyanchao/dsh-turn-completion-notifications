@@ -1,7 +1,7 @@
 {
   "name": "dsh-turn-completion-notifications",
   "version": "0.1.0",
-  "description": "为 DeepSeek Harness（DSH）打造的回复完成提醒插件，浏览较早的提问时，通过弹窗和可选提示音得知当前回复已完成。",
+  "description": "AI 回复完成提醒插件，通过弹窗和提示音得知当前回复已完成。",
   "keywords": [
     "deepseek",
     "deepseek-harness",
@@ -30,7 +30,8 @@
       "types": "./lib/types/client/index.d.ts",
       "default": "./lib/client.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
   },
   "license": "GPL-3.0-or-later",
   "dsh": {
@@ -78,6 +79,7 @@
     "unrun": "0.2.39"
   },
   "files": [
+    "locale/*.json",
     "lib",
     "cordis.patch.yml",
     "README.en.md"
