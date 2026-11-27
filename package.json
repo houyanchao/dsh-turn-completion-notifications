@@ -1,6 +1,6 @@
 {
   "name": "dsh-turn-completion-notifications",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "AI 回复完成提醒插件，通过弹窗和提示音得知当前回复已完成。",
   "keywords": [
     "deepseek",
