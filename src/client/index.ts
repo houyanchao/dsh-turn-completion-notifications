@@ -11,7 +11,7 @@ import { bindTheme } from './theme.ts'
 import { clearReminder, ReminderHost } from './reminder.tsx'
 
 const id = 'dsh-turn-completion-notifications'
-export const inject = ['slots', 'locale', 'theme']
+export const inject = ['slots', 'locale', 'theme', 'sessions', 'uiConversation']
 
 export function apply(ctx: Context): void {
   bindTheme(ctx)
@@ -20,6 +20,10 @@ export function apply(ctx: Context): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), `${id}: dictionaries`)
   ctx.slots.inject('conversation.session.header.actions', () => ctx.slots.register({
     name: 'conversation.session.header.actions', id, order: 42, locale: NS,
+    inject: sessionId => ({
+      completionEvents: ctx.sessions.binding(sessionId)?.eventSource,
+      completionChat: ctx.uiConversation.binding(sessionId).target('chat'),
+    }),
   }, ConversationObserver))
   ctx.slots.inject('shell.overlay', () => ctx.slots.register({
     name: 'shell.overlay', id, locale: NS,

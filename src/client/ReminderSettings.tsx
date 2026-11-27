@@ -4,6 +4,7 @@ import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 import type { NS } from './locales.ts'
 import { playAiCompleteSound, showAiCompleteToast } from './aiCompleteReminder.ts'
 import { setSetting, settings } from './settings.ts'
+import { containDialogFocus } from './dialogFocus.ts'
 import css from './settings.module.css'
 
 type Props = PropsLocale<typeof NS>
@@ -11,22 +12,10 @@ type Props = PropsLocale<typeof NS>
 export function ReminderSettings({ t }: Props) {
   const [open, setOpen] = useState(false)
   const preferences = useSyncExternalStore(settings.subscribe, () => settings.get())
-  const closeButton = useRef<HTMLButtonElement>(null)
+  const dialog = useRef<HTMLDivElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
   useEffect(() => {
-    if (!open) return
-    closeButton.current?.focus()
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.stopImmediatePropagation()
-        setOpen(false)
-      }
-    }
-    document.addEventListener('keydown', onKey, true)
-    return () => {
-      document.removeEventListener('keydown', onKey, true)
-      trigger.current?.focus()
-    }
+    if (open && dialog.current) return containDialogFocus(dialog.current, trigger.current, () => setOpen(false))
   }, [open])
 
   return (
@@ -40,10 +29,10 @@ export function ReminderSettings({ t }: Props) {
         <div className={css.subModalOverlay} onClick={event => {
           if (event.target === event.currentTarget) setOpen(false)
         }}>
-          <div role="dialog" aria-modal="true" aria-label={t('title')} className={css.subModal}>
+          <div ref={dialog} role="dialog" aria-modal="true" aria-label={t('title')} className={css.subModal}>
           <div className={css.subModalHeader}>
             <span>{t('title')}</span>
-            <button type="button" aria-label={t('close')} className={css.subModalClose} ref={closeButton} onClick={() => { setOpen(false) }}>✕</button>
+            <button type="button" aria-label={t('close')} className={css.subModalClose} onClick={() => { setOpen(false) }}>✕</button>
           </div>
           <div className={css.subModalBody}>
             <label className={css.reminderItem}>

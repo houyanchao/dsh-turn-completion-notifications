@@ -1,11 +1,10 @@
 import { useSyncExternalStore } from 'react'
-import { removeAiCompleteAnchor, stopAiCompleteSound } from './aiCompleteReminder.ts'
+import { stopAiCompleteSound } from './aiCompleteReminder.ts'
 import { detectDarkTheme, observeTheme } from './theme.ts'
-import { toast, ToastHost } from './toast.tsx'
+import { clearCompletionToasts, ToastHost } from './toast.tsx'
 
 export function clearReminder(): void {
-  toast.forceHideAll()
-  removeAiCompleteAnchor()
+  clearCompletionToasts()
   stopAiCompleteSound()
 }
 

@@ -17,7 +17,7 @@ See when the current reply is ready while you read an earlier turn. Enable a sou
 ## Usage
 
 1. In a DSH Web conversation with at least two questions, scroll to an earlier turn while the latest reply is being generated.
-2. When the turn finishes, a **Reply completed** pill appears at the upper right and fades after about 3.5 seconds. Reading the latest turn, reaching the bottom of the chat, or chatting in a single-turn conversation keeps reminders quiet.
+2. When a reply finishes successfully, a **Reply completed** pill appears at the upper right and fades after about 3.5 seconds. Each queued turn is checked separately. Reminders stay quiet when you stop a reply, a request fails, you are reading that reply or near the bottom of the chat, or the conversation has only one question.
 3. Open **Settings → General → Turn completion notifications → Settings** to configure the popup and sound separately. The popup is enabled by default. Sound is off by default. Enabling either option previews it immediately.
 
 The reminder appears inside the current conversation page and requires no desktop notification permission. The sound ships with the plugin and follows your browser’s autoplay policy. The interface follows the DSH language and theme.

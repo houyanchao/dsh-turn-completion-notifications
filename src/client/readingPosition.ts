@@ -1,39 +1,53 @@
+import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
 import { findMessageElement, type ConversationDOM } from './conversationDom.ts'
 
-/** Timeline's activation line measured from the top of the conversation scrollport. */
+/** Timeline's question activation line, measured from the top of the conversation scrollport. */
 const ACTIVATE_AHEAD = 120
 
-function computeActiveIndex(offsetTops: readonly number[], scrollTop: number): number {
-  if (offsetTops.length === 0) return -1
-  let active = 0
-  for (let i = 0; i < offsetTops.length; i++) {
-    if ((offsetTops[i] - ACTIVATE_AHEAD) <= scrollTop) {
-      active = i
-    } else {
-      break
-    }
-  }
-  return active
-}
+export function isReadingHistory(
+  { flow, scroll }: ConversationDOM, chat: ChatSnapshot, turn: number,
+  beforeRender = false,
+): boolean {
+  // Match the host's bottom-pinning tolerance, including fractional scroll offsets.
+  if (scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight <= 25) return false
 
-export function isReadingHistory(scope: ConversationDOM, questionKeys: readonly string[]): boolean {
-  if (questionKeys.length <= 1) return false
-  const { flow, scroll } = scope
-  // Timeline pads the end of the conversation to bring a short final turn up
-  // to the activation line. This independent plugin leaves that layout to DSH.
-  if (scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 1) return false
-  const containerTop = scroll.getBoundingClientRect().top
-  const offsets: number[] = []
-  let hasMountedMessage = false
-  for (const key of questionKeys) {
-    const el = findMessageElement(flow, key)
-    if (el === null) {
-      offsets.push(offsets.length > 0 ? offsets[offsets.length - 1] : 0)
-      continue
+  let questionKey: string | undefined
+  let replyKey: string | undefined
+  for (const key of chat.locations.getTurn(turn)) {
+    const node = chat.nodes.get(key)
+    if (node === undefined || node.visibility === 'hidden') continue
+    if (node.kind === 'user' || node.kind === 'steering') {
+      questionKey = key
+      replyKey = undefined
+    } else if (node.kind === 'assistant-step') {
+      replyKey = key
     }
-    hasMountedMessage = true
-    offsets.push(el.getBoundingClientRect().top - containerTop + scroll.scrollTop)
   }
-  const activeIndex = computeActiveIndex(hasMountedMessage ? offsets : [], scroll.scrollTop)
-  return activeIndex < questionKeys.length - 1
+  if (questionKey === undefined) return false
+  const firstQuestion = chat.order.find(key => {
+    const node = chat.nodes.get(key)
+    return node?.visibility === 'visible' && (node.kind === 'user' || node.kind === 'steering')
+  })
+  if (firstQuestion === undefined || firstQuestion === questionKey) return false
+
+  const question = findMessageElement(flow, questionKey)
+  if (question === null) return false
+  const viewport = scroll.getBoundingClientRect()
+  const questionBox = question.getBoundingClientRect()
+  if (questionBox.top <= viewport.top + ACTIVATE_AHEAD) return false
+
+  // A short answer can already be fully visible below the activation line.
+  // The host's sticky composer can cover the bottom part of the scrollport.
+  const composer = scroll.querySelector<HTMLElement>('[data-composer-seat]')
+  const bottom = composer?.getClientRects().length
+    ? Math.min(viewport.bottom, composer.getBoundingClientRect().top) : viewport.bottom
+  // If the question extends to the visible edge, its reply is below it.
+  if (questionBox.bottom >= bottom) return true
+  const reply = replyKey === undefined ? null : findMessageElement(flow, replyKey)
+  if (reply !== null) {
+    const box = reply.getBoundingClientRect()
+    if (box.height > 0) return box.bottom > bottom || (!beforeRender && box.top < viewport.top)
+  }
+  // At queue handoff, allow an unpainted answer to settle in the ordinary timer.
+  return !beforeRender
 }

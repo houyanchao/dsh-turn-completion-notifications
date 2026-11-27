@@ -1,74 +1,25 @@
-/* 通用 UI 基建样式：逐参数移植原扩展 global/ 下的
-   toast-manager / tooltip-manager / dropdown-manager / popconfirm-manager /
-   input-modal 五份样式（含 toast JS 内联样式的类化）。
-   深浅两套值由宿主容器 data-theme 切换（原版为 html[data-timeline-theme]）。 */
-
-/* ==== 宿主容器（imperative UI 的挂载点，自身不占布局） ==== */
+/* 胶囊中心与原右上角锚点对齐，保留 10px 间距。 */
 .host {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  overflow: visible;
+  left: 8px;
+  right: 37px;
+  top: clamp(29px, 72.5px, calc(100vh - 29px));
+  transform: translateY(-50%);
+  display: grid;
+  justify-items: end;
+  align-items: center;
   pointer-events: none;
-  /* 原版各浮层直挂 body、z-index 2147483647/2147483648；
-     宿主容器封顶取最大值，保证相对页面的有效层级与原版一致。 */
   z-index: 2147483647;
 }
 
-/* ==== Toast（原 GlobalToastManager 内联样式 + styles.css） ==== */
-.toast {
-  position: fixed;
+.toastAiComplete {
+  grid-area: 1 / 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  z-index: 2147483647;
-  pointer-events: none;
-  white-space: nowrap;
-  max-width: 400px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-.toastMultiline {
   box-sizing: border-box;
-  max-width: min(400px, calc(100vw - 16px));
-  white-space: pre-line;
+  max-width: min(400px, 100%);
   overflow-wrap: anywhere;
-}
-
-.toastMultilineCentered {
-  inset-inline: 0;
-  width: max-content;
-  margin-inline: auto;
-}
-
-/* 默认视觉（useClassStyles=false 时叠加） */
-.toastDefaultVisual {
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.06);
-  opacity: 0;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  transform: translateY(-10px);
-}
-
-.toastVisible {
-  opacity: 1 !important;
-}
-
-.toastDefaultVisual.toastVisible {
-  transform: translateY(0) !important;
-}
-
-.toastIcon {
-  font-size: 16px;
-}
-
-/* AI 回复完成提示 - 右上角胶囊 Toast（原 .ait-ai-complete-toast） */
-.toastAiComplete {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   padding: 7px 14px 7px 7px;
   border-radius: 999px;
   font-size: 13px;
@@ -109,9 +60,9 @@
   display: block;
 }
 
-.toastAiComplete.toastVisible {
-  opacity: 1 !important;
-  transform: translateX(0) scale(1) !important;
+.toastAiComplete[data-visible="true"] {
+  opacity: 1;
+  transform: translateX(0) scale(1);
 }
 
 .host[data-theme='dark'] .toastAiComplete {
